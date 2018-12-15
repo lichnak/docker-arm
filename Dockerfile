@@ -1,4 +1,4 @@
-FROM python:3
+FROM arm32v6/python:3
 
 WORKDIR /usr/src/app
 
@@ -6,4 +6,4 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-CMD [ "/usr/local/bin/python", "./fillalbumartist.py", "-d", "/data"]
+CMD [ "python", "./fillalbumartist.py", "-d", "/data"]
