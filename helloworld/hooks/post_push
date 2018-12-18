@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Parse image name for repo name
+tagStart=$(expr index "$IMAGE_NAME" :)
+REPO_NAME=${IMAGE_NAME:0:tagStart-1}
+
+# Read image metadata from the labels
+ARCH=`docker inspect -f "{{ index .Architecture }}" "${IMAGE_NAME}"`
+VERSION=`docker inspect -f "{{ index .Config.Labels \"org.label-schema.schema-version\" }}" "${IMAGE_NAME}"`
+
+# Tag and push image for each additional tag
+for TAG in {"${ARCH}","${ARCH}-latest"}; do
+  docker tag $IMAGE_NAME ${REPO_NAME}:{TAG}
+done
+
+# Create manifest list
+# TODO: only after building all the tags (?)
+docker manifest create ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:amd64-${VERSION} ${IMAGE_NAME}:arm32v7-${VERSION}
+docker manifest create ${IMAGE_NAME}:latest ${IMAGE_NAME}:latest ${IMAGE_NAME}:latest
+docker manifest push ${IMAGE_NAME}:${VERSION}
+docker manifest push --purge ${IMAGE_NAME}:latest
