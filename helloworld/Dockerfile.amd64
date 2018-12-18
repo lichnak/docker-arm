@@ -1,5 +1,10 @@
 FROM amd64/python:3-slim
 
+LABEL maintainer="Xabi Ezpeleta <xezpeleta@gmail.com>"
+
+# Labels
+LABEL org.label-schema.schema-version="1.1"
+
 # Install requirements
 WORKDIR /usr/src/app
 COPY requirements.txt ./
