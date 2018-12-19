@@ -6,13 +6,14 @@ set -e
 # experimental features (docker manifest):
 docker18()
 { 
-  echo "Running command: docker18 $@"
+  commands="$@"
+  echo "Running command: docker18 ${commands}"
 
   docker run --rm \
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
-  -e DOCKERCMD="$@" \
+  -e DOCKERCMD="${commands}" \
   -v /var/run/docker.sock:/var/run/docker.sock docker sh -c \
     'mkdir /root/.docker/ && \
     echo "${DOCKERCFG}" > /root/.docker/config.json && \
