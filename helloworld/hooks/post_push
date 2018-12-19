@@ -5,26 +5,17 @@ set -e
 # Use a newer cli version (18.09.0) in order to use
 # experimental features (docker manifest):
 docker18()
-{
-  # Convert environment variable into config file
-  configfile="/root/.docker/config.json"
-  [ -d $(dirname "${configfile}") ] || mkdir -p $(dirname "${configfile}")
-  echo "${DOCKERCFG}" > "${configfile}"
-  echo "[DEBUG] Docker config file ${configfile}:"
-  cat "${configfile}"
-  
+{  
   docker run --rm \
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
+  -e DOCKERCMD="$@" \
   -v /var/run/docker.sock:/var/run/docker.sock docker sh -c \
     'mkdir /root/.docker/ && \
-     echo "${DOCKERCFG}" > /root/.docker/config.json && \
-     cat /root/.docker/config.json && \
-     docker "$@"'
-  
-  # Remove config file
-  rm ~/.docker/config.json
+    echo "${DOCKERCFG}" > /root/.docker/config.json && \
+    cat /root/.docker/config.json && \
+    docker "${DOCKERCMD}"'
 }
 
 # Read image metadata from labels
