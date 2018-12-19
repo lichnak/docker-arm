@@ -13,7 +13,7 @@ VERSION=`docker inspect -f "{{ index .Config.Labels \"org.label-schema.schema-ve
 for TAG in {"${ARCH}","${ARCH}-${VERSION}"}; do
   echo "Tag: ${REPO_NAME}:${TAG}"
   docker tag "$IMAGE_NAME" "${REPO_NAME}:${TAG}"
-  docker push "$IMAGE_NAME" "${REPO_NAME}:${TAG}"
+  docker push "${REPO_NAME}:${TAG}"
 done
 
 # Create manifest list
