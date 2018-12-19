@@ -37,6 +37,18 @@ for TAG in {"${ARCH}-latest","${ARCH}-${VERSION}"}; do
   docker push "${DOCKER_REPO}:${TAG}"
 done
 
+
+# docker manifest requires image name (without url) as an argument
+IFS='/' read URL USERNAME IMAGE_NAME <<< "$IMAGE_NAME"
+# Above line will split the IMAGE_NAME as:
+# URL=index.docker.io
+# USERNAME=xezpeleta
+# IMAGE_NAME=helloworld:arm32v7
+IFS=':' read IMAGE_NAME TAG <<< "$IMAGE_NAME"
+# Above line will split the IMAGE_NAME as:
+# IMAGE_NAME = helloworld
+# TAG = arm32v7
+
 # Create manifest list
 # DISABLED: DockerHub docker cli does not have "experimental" enabled
 # TODO: only after building all the tags (?)
