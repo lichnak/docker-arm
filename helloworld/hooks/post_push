@@ -5,7 +5,9 @@ set -e
 # Use a newer cli version (18.09.0) in order to use
 # experimental features (docker manifest):
 docker18()
-{  
+{ 
+  echo "Running command: docker18 $@"
+
   docker run --rm \
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
