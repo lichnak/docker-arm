@@ -22,7 +22,7 @@ docker18()
   -v /var/run/docker.sock:/var/run/docker.sock docker "$@"
   
   # Remove config file
-  rm ~/.docker/config.json
+  #rm ~/.docker/config.json
 }
 
 # Read image metadata from labels
