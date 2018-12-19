@@ -54,7 +54,7 @@ done
 # TODO: only after building all the tags (?)
 # Build a multi-arch manifest
 #docker18 manifest create --amend ${USERNAME}/${IMAGE_NAME}:${VERSION} \
-  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION}
+#  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION}
 docker18 manifest create --amend ${USERNAME}/${IMAGE_NAME}:latest \
   ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION}
 
