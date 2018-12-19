@@ -6,6 +6,7 @@ set -e
 # experimental features (docker manifest):
 docker18()
 {
+  [ -d ~/.docker ] || mkdir ~/.docker
   echo "${DOCKERCFG}" > ~/.docker/config.json
   docker run --privileged --rm \
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
