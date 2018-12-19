@@ -33,7 +33,16 @@ done
 # Create manifest list
 # DISABLED: DockerHub docker cli does not have "experimental" enabled
 # TODO: only after building all the tags (?)
-#docker manifest create ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:amd64-${VERSION} ${IMAGE_NAME}:arm32v7-${VERSION}
-#docker manifest create ${IMAGE_NAME}:latest ${IMAGE_NAME}:latest ${IMAGE_NAME}:latest
-#docker manifest push ${IMAGE_NAME}:${VERSION}
-#docker manifest push --purge ${IMAGE_NAME}:latest
+# Build a multi-arch manifest
+docker manifest create --amend ${IMAGE_NAME}:${VERSION} \
+  ${IMAGE_NAME}:amd64-${VERSION} ${IMAGE_NAME}:arm32v7-${VERSION}
+docker manifest create --amend ${IMAGE_NAME}:latest \
+  ${IMAGE_NAME}:amd64-${VERSION} ${IMAGE_NAME}:arm32v7-${VERSION}
+
+docker manifest annotate ${IMAGE_NAME}:${VERSION} \
+  ${IMAGE_NAME}:amd64-${VERSION} --os linux --arch amd64
+docker manifest annotate ${IMAGE_NAME}:${VERSION} \
+  ${IMAGE_NAME}:arm32v7-${VERSION} --os linux --arch arm --variant 7
+
+docker manifest push ${IMAGE_NAME}:${VERSION}
+docker manifest push --purge ${IMAGE_NAME}:latest

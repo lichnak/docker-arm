@@ -2,7 +2,7 @@
 set -e
 
 image="xezpeleta/helloworld"
-version="1.2"
+version="1.4"
 
 # Register handlers
 # Register qemu-*-static for all supported processors except the current one
@@ -21,8 +21,15 @@ done
 
 
 # Build a multi-arch manifest
-docker manifest create ${image}:${version} ${image}:amd64-${version} ${image}:arm32v7-${version}
-docker manifest create ${image}:latest ${image}:amd64-${version} ${image}:arm32v7-${version}
+docker manifest create ${image}:${version} \
+  ${image}:amd64-${version} ${image}:arm32v7-${version}
+docker manifest create ${image}:latest \
+  ${image}:amd64-${version} ${image}:arm32v7-${version}
+
+docker manifest annotate ${image}:${version} \
+  ${image}:amd64-${version} --os linux --arch amd64
+docker manifest annotate ${image}:${version} \
+  ${image}:arm32v7-${version} --os linux --arch arm --variant 7
 
 docker manifest push ${image}:${version}
 docker manifest push --purge ${image}:latest
