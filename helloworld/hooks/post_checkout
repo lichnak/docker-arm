@@ -4,10 +4,13 @@ set -e
 # Docker Hub client version is: 17.06.2-ee-6
 # Use a newer cli version (18.09.0) in order to use
 # experimental features (docker manifest):
-alias docker18='docker run --rm \
+docker18()
+{
+  docker run --rm \
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKERCFG=${DOCKERCFG} \
-  -v /var/run/docker.sock:/var/run/docker.sock docker'
+  -v /var/run/docker.sock:/var/run/docker.sock docker' $1
+}
 
 echo "---------- DEBUG ----------"
 alias
