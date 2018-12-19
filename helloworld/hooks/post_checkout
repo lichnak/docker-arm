@@ -5,11 +5,15 @@ export DOCKER_CLI_EXPERIMENTAL="enabled"
 
 echo "---------- DEBUG ----------"
 echo "Docker version:"
-docker version
+docker run -it --rm \
+  -e "DOCKER_CLI_EXPERIMENTAL=enabled" \
+  -e "DOCKERCFG=${DOCKERCFG}" \
+  -v /var/run/docker.sock:/var/run/docker.sock docker version
+
 echo -e "\n"
 echo "Environment variables:"
 echo "DOCKER_REPO: ${DOCKER_REPO}"
-echo "DOCKER_TAG: ${DOCKER_tAG}"
+echo "DOCKER_TAG: ${DOCKER_TAG}"
 echo "DOCKER_CLI_EXPERIMENTAL: ${DOCKER_CLI_EXPERIMENTAL}"
 
 docker manifest inspect xezpeleta/helloworld:latest
