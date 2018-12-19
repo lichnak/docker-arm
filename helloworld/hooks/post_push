@@ -1,15 +1,22 @@
 #!/bin/bash
 set -e
 
-# Parse image name for repo name
-#tagStart=$(expr index "$IMAGE_NAME" :)
-#REPO_NAME=${IMAGE_NAME:0:tagStart-1} => $DOCKER_REPO
+# Docker Hub client version is: 17.06.2-ee-6
+# Use a newer cli version (18.09.0) in order to use
+# experimental features (docker manifest):
+docker18()
+{
+  docker run --rm \
+  -e DOCKER_CLI_EXPERIMENTAL=enabled \
+  -e DOCKERCFG="${DOCKERCFG}" \
+  -v /var/run/docker.sock:/var/run/docker.sock docker $1
+}
 
 # Read image metadata from labels
 VERSION=`docker inspect -f "{{ index .Config.Labels \"org.label-schema.schema-version\" }}" "${IMAGE_NAME}"`
 
 # Parse IMAGE_NAME, as CACHE_TAG is broken on Docker Hub post_push
-IFS=: read CURRENT_REPO CURRENT_TAG <<< $IMAGE_NAME
+#IFS=: read CURRENT_REPO CURRENT_TAG <<< $IMAGE_NAME
 
 echo "---------- DEBUG -----------"
 echo "Docker Hub environment variables:"
@@ -23,7 +30,7 @@ echo "CURRENT_TAG: $CURRENT_TAG"
 echo "VERSION: $VERSION"
 echo "----------------------------"
 
-ARCH=${CURRENT_TAG}
+ARCH=${DOCKER_TAG}
 # Tag and push image for each additional tag
 for TAG in {"${ARCH}-latest","${ARCH}-${VERSION}"}; do
   echo "Tag: ${DOCKER_REPO}:${TAG}"
@@ -35,15 +42,15 @@ done
 # DISABLED: DockerHub docker cli does not have "experimental" enabled
 # TODO: only after building all the tags (?)
 # Build a multi-arch manifest
-docker manifest create --amend ${IMAGE_NAME}:${VERSION} \
+docker18 manifest create --amend ${IMAGE_NAME}:${VERSION} \
   ${IMAGE_NAME}:amd64-${VERSION} ${IMAGE_NAME}:arm32v7-${VERSION}
-docker manifest create --amend ${IMAGE_NAME}:latest \
+docker18 manifest create --amend ${IMAGE_NAME}:latest \
   ${IMAGE_NAME}:amd64-${VERSION} ${IMAGE_NAME}:arm32v7-${VERSION}
 
-docker manifest annotate ${IMAGE_NAME}:${VERSION} \
+docker18 manifest annotate ${IMAGE_NAME}:${VERSION} \
   ${IMAGE_NAME}:amd64-${VERSION} --os linux --arch amd64
-docker manifest annotate ${IMAGE_NAME}:${VERSION} \
+docker18 manifest annotate ${IMAGE_NAME}:${VERSION} \
   ${IMAGE_NAME}:arm32v7-${VERSION} --os linux --arch arm --variant 7
 
-docker manifest push ${IMAGE_NAME}:${VERSION}
-docker manifest push --purge ${IMAGE_NAME}:latest
+docker18 manifest push ${IMAGE_NAME}:${VERSION}
+docker18 manifest push --purge ${IMAGE_NAME}:latest

@@ -21,8 +21,6 @@ echo -e "\n"
 echo "Environment variables:"
 echo "DOCKER_REPO: ${DOCKER_REPO}"
 echo "DOCKER_TAG: ${DOCKER_TAG}"
-
-docker18 manifest inspect xezpeleta/helloworld:latest
 echo "---------------------------"
 
 # downloads a local copy of qemu on docker-hub build machines
