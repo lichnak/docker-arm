@@ -12,7 +12,7 @@ docker18()
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
-  -v ${HOME}/.docker/config.json:/root/.docker/config.json
+  -v "${HOME}"/.docker/config.json:/root/.docker/config.json \
   -v /var/lib/docker:/var/lib/docker \
   -v /var/run/docker.sock:/var/run/docker.sock docker "$@"
   rm ~/.docker/config.json
