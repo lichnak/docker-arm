@@ -3,7 +3,7 @@ FROM amd64/python:3-slim
 LABEL maintainer="Xabi Ezpeleta <xezpeleta@gmail.com>"
 
 # Labels
-LABEL org.label-schema.schema-version="1.1"
+LABEL org.label-schema.schema-version="1.2"
 
 # Install requirements
 WORKDIR /usr/src/app
