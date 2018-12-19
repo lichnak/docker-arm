@@ -59,15 +59,15 @@ IFS=':' read IMAGE_NAME TAG <<< "$IMAGE_NAME"
 # Create manifest list
 # TODO: only after building all the tags (?)
 # Build a multi-arch manifest
-docker18 manifest create --amend ${IMAGE_NAME}:${VERSION} \
-  ${IMAGE_NAME}:amd64-${VERSION} ${IMAGE_NAME}:arm32v7-${VERSION}
-docker18 manifest create --amend ${IMAGE_NAME}:latest \
-  ${IMAGE_NAME}:amd64-${VERSION} ${IMAGE_NAME}:arm32v7-${VERSION}
+docker18 manifest create --amend ${USERNAME}/${IMAGE_NAME}:${VERSION} \
+  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION}
+docker18 manifest create --amend ${USERNAME}/${IMAGE_NAME}:latest \
+  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION}
 
-docker18 manifest annotate ${IMAGE_NAME}:${VERSION} \
-  ${IMAGE_NAME}:amd64-${VERSION} --os linux --arch amd64
-docker18 manifest annotate ${IMAGE_NAME}:${VERSION} \
-  ${IMAGE_NAME}:arm32v7-${VERSION} --os linux --arch arm --variant 7
+docker18 manifest annotate ${USERNAME}/${IMAGE_NAME}:${VERSION} \
+  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} --os linux --arch amd64
+docker18 manifest annotate ${USERNAME}/${IMAGE_NAME}:${VERSION} \
+  ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION} --os linux --arch arm --variant 7
 
-docker18 manifest push ${IMAGE_NAME}:${VERSION}
-docker18 manifest push --purge ${IMAGE_NAME}:latest
+docker18 manifest push ${USERNAME}/${IMAGE_NAME}:${VERSION}
+docker18 manifest push --purge ${USERNAME}/${IMAGE_NAME}:latest
