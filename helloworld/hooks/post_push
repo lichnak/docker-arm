@@ -6,15 +6,22 @@ set -e
 # experimental features (docker manifest):
 docker18()
 {
-  [ -d ~/.docker ] || mkdir ~/.docker
-  echo "${DOCKERCFG}" > ~/.docker/config.json
+  # Convert environment variable into config file
+  configfile=".docker/config.json"
+  [ -d $(dirname "${HOME}/${configfile}") ] || mkdir -p ~/.docker
+  echo "${DOCKERCFG}" > "${HOME}"/.docker/config.json
+  echo "[DEBUG] Docker config file:"
+  cat "${HOME}"/"${configfile}"
+  
   docker run --privileged --rm \
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
-  -v "${HOME}"/.docker/config.json:/root/.docker/config.json \
+  -v "${HOME}"/"${configfile}":/root/"${configfile}" \
   -v /var/lib/docker:/var/lib/docker \
   -v /var/run/docker.sock:/var/run/docker.sock docker "$@"
+  
+  # Remove config file
   rm ~/.docker/config.json
 }
 
