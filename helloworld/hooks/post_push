@@ -10,7 +10,7 @@ docker18()
   configfile=".docker/config.json"
   [ -d $(dirname "${HOME}/${configfile}") ] || mkdir -p ~/.docker
   echo "${DOCKERCFG}" > "${HOME}"/.docker/config.json
-  echo "[DEBUG] Docker config file:"
+  echo "[DEBUG] Docker config file ${HOME}/${configfile}:"
   cat "${HOME}"/"${configfile}"
   
   docker run --privileged --rm \
@@ -22,7 +22,7 @@ docker18()
   -v /var/run/docker.sock:/var/run/docker.sock docker "$@"
   
   # Remove config file
-  #rm ~/.docker/config.json
+  rm ~/.docker/config.json
 }
 
 # Read image metadata from labels
