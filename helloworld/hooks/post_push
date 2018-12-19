@@ -7,18 +7,18 @@ set -e
 docker18()
 {
   # Convert environment variable into config file
-  configfile=".docker/config.json"
-  [ -d $(dirname "${HOME}/${configfile}") ] || mkdir -p ~/.docker
-  echo "${DOCKERCFG}" > "${HOME}"/.docker/config.json
-  echo "[DEBUG] Docker config file ${HOME}/${configfile}:"
-  cat "${HOME}"/"${configfile}"
+  configfile="/root/.docker/config.json"
+  [ -d $(dirname "${configfile}") ] || mkdir -p $(dirname "${configfile}")
+  echo "${DOCKERCFG}" > "${configfile}"
+  echo "[DEBUG] Docker config file ${configfile}:"
+  cat "${configfile}"
   
-  docker run --privileged --rm \
+  docker run --rm \
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
-  -v "${HOME}"/"${configfile}":/root/"${configfile}" \
-  -v /var/lib/docker:/var/lib/docker \
+  -e DOCKER_CONFIG="/root/.docker"
+  -v "${configfile}":"${configfile}" \
   -v /var/run/docker.sock:/var/run/docker.sock docker "$@"
   
   # Remove config file
@@ -62,7 +62,6 @@ IFS=':' read IMAGE_NAME TAG <<< "$IMAGE_NAME"
 # TAG = arm32v7
 
 # Create manifest list
-# DISABLED: DockerHub docker cli does not have "experimental" enabled
 # TODO: only after building all the tags (?)
 # Build a multi-arch manifest
 docker18 manifest create --amend ${IMAGE_NAME}:${VERSION} \
