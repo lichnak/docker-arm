@@ -1,16 +1,20 @@
 #!/bin/bash
 set -e
 
-#echo "---------- DEBUG ----------"
-#echo "Environment variables:"
-#printenv
-
 export DOCKER_CLI_EXPERIMENTAL="enabled"
 
-docker manifest --help
+echo "---------- DEBUG ----------"
+echo "Docker version:"
+docker version
+echo -e "\n"
+echo "Environment variables:"
+echo "DOCKER_REPO: ${DOCKER_REPO}"
+echo "DOCKER_TAG: ${DOCKER_tAG}"
+echo "DOCKER_CLI_EXPERIMENTAL: ${DOCKER_CLI_EXPERIMENTAL}"
+
+docker manifest inspect xezpeleta/helloworld:latest
 
 # downloads a local copy of qemu on docker-hub build machines
-#curl -L https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz | tar zxvf - -C . && mv qemu-3.0.0+resin-arm/qemu-arm-static .
 curl -L https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-arm-static -o qemu-arm-static
 
 # Exec permission
