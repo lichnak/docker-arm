@@ -6,7 +6,7 @@ set -e
 #REPO_NAME=${IMAGE_NAME:0:tagStart-1} => $DOCKER_REPO
 
 # Read image metadata from the labels
-ARCH=`docker inspect -f "{{ index .Architecture }}" "${IMAGE_NAME}"`
+ARCH=${CACHE_TAG}
 VERSION=`docker inspect -f "{{ index .Config.Labels \"org.label-schema.schema-version\" }}" "${IMAGE_NAME}"`
 
 echo "---------- DEBUG -----------"
@@ -18,7 +18,7 @@ echo "VERSION: $VERSION"
 echo "----------------------------"
 
 # Tag and push image for each additional tag
-for TAG in {"${ARCH}","${ARCH}-${VERSION}"}; do
+for TAG in {"${ARCH}-latest","${ARCH}-${VERSION}"}; do
   echo "Tag: ${DOCKER_REPO}:${TAG}"
   docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${TAG}"
   docker push "${DOCKER_REPO}:${TAG}"
