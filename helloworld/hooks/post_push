@@ -2,18 +2,26 @@
 set -e
 
 # Parse image name for repo name
-tagStart=$(expr index "$IMAGE_NAME" :)
-REPO_NAME=${IMAGE_NAME:0:tagStart-1}
+#tagStart=$(expr index "$IMAGE_NAME" :)
+#REPO_NAME=${IMAGE_NAME:0:tagStart-1} => $DOCKER_REPO
 
 # Read image metadata from the labels
 ARCH=`docker inspect -f "{{ index .Architecture }}" "${IMAGE_NAME}"`
 VERSION=`docker inspect -f "{{ index .Config.Labels \"org.label-schema.schema-version\" }}" "${IMAGE_NAME}"`
 
+echo "---------- DEBUG -----------"
+echo "IMAGE_NAME: $IMAGE_NAME"
+echo "DOCKER_REPO: $DOCKER_REPO"
+echo "CACHE_TAG: $CACHE_TAG"
+echo "ARCH: $ARCH"
+echo "VERSION: $VERSION"
+echo "----------------------------"
+
 # Tag and push image for each additional tag
 for TAG in {"${ARCH}","${ARCH}-${VERSION}"}; do
-  echo "Tag: ${REPO_NAME}:${TAG}"
-  docker tag "$IMAGE_NAME" "${REPO_NAME}:${TAG}"
-  docker push "${REPO_NAME}:${TAG}"
+  echo "Tag: ${DOCKER_REPO}:${TAG}"
+  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${TAG}"
+  docker push "${DOCKER_REPO}:${TAG}"
 done
 
 # Create manifest list
