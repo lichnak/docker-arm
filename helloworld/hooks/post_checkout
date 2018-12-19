@@ -10,6 +10,7 @@ alias docker18='docker run --rm \
   -v /var/run/docker.sock:/var/run/docker.sock docker'
 
 echo "---------- DEBUG ----------"
+alias
 echo "Docker version:"
 docker18 version
 
