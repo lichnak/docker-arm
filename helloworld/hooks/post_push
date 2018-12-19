@@ -6,9 +6,10 @@ set -e
 # experimental features (docker manifest):
 docker18()
 {
-  docker run --rm \
+  docker run --privileged --rm \
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKERCFG="${DOCKERCFG}" \
+  -v /var/lib/docker:/var/lib/docker \
   -v /var/run/docker.sock:/var/run/docker.sock docker $1
 }
 
@@ -25,8 +26,6 @@ echo "DOCKER_REPO: $DOCKER_REPO"
 echo "DOCKER_TAG: $DOCKER_TAG"
 echo "CACHE_TAG: $CACHE_TAG"
 echo "Custom variables:"
-echo "CURRENT_REPO: $CURRENT_REPO"
-echo "CURRENT_TAG: $CURRENT_TAG"
 echo "VERSION: $VERSION"
 echo "----------------------------"
 
