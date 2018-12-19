@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
 
-echo "---------- DEBUG ----------"
-echo "Environment variables:"
-printenv
+#echo "---------- DEBUG ----------"
+#echo "Environment variables:"
+#printenv
 
 export DOCKER_CLI_EXPERIMENTAL="enabled"
 
-docker login
+docker manifest --help
 
 # downloads a local copy of qemu on docker-hub build machines
 #curl -L https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz | tar zxvf - -C . && mv qemu-3.0.0+resin-arm/qemu-arm-static .
