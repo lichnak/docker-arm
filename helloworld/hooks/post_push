@@ -9,8 +9,8 @@ ARCH=`docker inspect -f "{{ index .Architecture }}" "${IMAGE_NAME}"`
 VERSION=`docker inspect -f "{{ index .Config.Labels \"org.label-schema.schema-version\" }}" "${IMAGE_NAME}"`
 
 # Tag and push image for each additional tag
-for TAG in {"${ARCH}","${ARCH}-latest"}; do
-  docker tag $IMAGE_NAME ${REPO_NAME}:{TAG}
+for TAG in {"${ARCH}","${ARCH}-${VERSION}"}; do
+  docker tag "$IMAGE_NAME" "${REPO_NAME}:${TAG}"
 done
 
 # Create manifest list
