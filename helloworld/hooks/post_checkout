@@ -3,11 +3,11 @@ set -e
 
 echo "---------- DEBUG ----------"
 echo "Environment variables:"
-echo "DOCKER_CONFIG:${DOCKER_CONFIG}"
-echo "DOCKER_CLI_EXPERIMENTAL:${DOCKER_CLI_EXPERIMENTAL}"
+printenv
 
-echo "Enable Docker CLI experimental features:"
-mkdir ~/.docker && echo '{ "experimental": "enabled" }' > ~/.docker/config.json
+export DOCKER_CLI_EXPERIMENTAL="enabled"
+
+docker login
 
 # downloads a local copy of qemu on docker-hub build machines
 #curl -L https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz | tar zxvf - -C . && mv qemu-3.0.0+resin-arm/qemu-arm-static .
