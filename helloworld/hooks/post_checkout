@@ -5,7 +5,7 @@ export DOCKER_CLI_EXPERIMENTAL="enabled"
 
 echo "---------- DEBUG ----------"
 echo "Docker version:"
-docker run -it --rm \
+docker run --rm \
   -e "DOCKER_CLI_EXPERIMENTAL=enabled" \
   -e "DOCKERCFG=${DOCKERCFG}" \
   -v /var/run/docker.sock:/var/run/docker.sock docker version
