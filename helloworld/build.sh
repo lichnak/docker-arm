@@ -11,6 +11,7 @@ version="1.2"
 
 # Download a local copy of qemu
 curl -L https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-arm-static -o qemu-arm-static
+chmod 755 qemu-arm-static
 
 # Build and push images
 for arch in arm32v7 amd64; do
