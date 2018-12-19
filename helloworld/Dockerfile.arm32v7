@@ -8,6 +8,7 @@ LABEL org.label-schema.schema-version="1.2"
 # Qemu-user-static to build arm image from x86 computer
 #ADD https://github.com/multiarch/qemu-user-static/releases/download/v2.12.0/qemu-arm-static /usr/bin/qemu-arm-static
 COPY qemu-arm-static /usr/bin/qemu-arm-static
+RUN chmod 755 /usr/bin/qemu-arm-static
 
 # Install requirements
 WORKDIR /usr/src/app
