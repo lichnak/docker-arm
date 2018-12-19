@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+echo "---------- DEBUG ----------"
+echo "Environment variables:"
+echo "DOCKER_CONFIG:${DOCKER_CONFIG}"
+echo "DOCKER_CLI_EXPERIMENTAL:${DOCKER_CLI_EXPERIMENTAL}"
+
 echo "Enable Docker CLI experimental features:"
 mkdir ~/.docker && echo '{ "experimental": "enabled" }' > ~/.docker/config.json
 
