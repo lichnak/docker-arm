@@ -17,9 +17,11 @@ docker18()
   -e DOCKER_CLI_EXPERIMENTAL=enabled \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
-  -e DOCKER_CONFIG="/root/.docker" \
-  -v "${configfile}":"${configfile}" \
-  -v /var/run/docker.sock:/var/run/docker.sock docker "$@"
+  -v /var/run/docker.sock:/var/run/docker.sock docker sh -c \
+    'mkdir /root/.docker/ && \
+     echo "${DOCKERCFG}" > /root/.docker/config.json && \
+     cat /root/.docker/config.json && \
+     docker "$@"'
   
   # Remove config file
   rm ~/.docker/config.json
