@@ -73,4 +73,6 @@ DOCKERCFG="{ \"auths\": { \"https://index.docker.io/v1/\": { \"auth\": "${DOCKER
 
 ### Test docker18 manifest
 docker18 manifest create xezpeleta/helloworld:latest xezpeleta/helloworld:amd64-latest xezpeleta/helloworld:arm32v7-latest
+docker18 manifest annotate xezpeleta/helloworld:latest xezpeleta/helloworld:amd64-latest --os linux --arch amd64
+docker18 manifest annotate xezpeleta/helloworld:latest xezpeleta/helloworld:arm32v7-latest --os linux --arch arm --variant 7
 docker18 manifest push xezpeleta/helloworld:latest
