@@ -17,7 +17,7 @@ docker18()
   -v $(pwd)/.docker/manifests:/root/.docker/manifests \
   -v /var/run/docker.sock:/var/run/docker.sock docker:18.09 sh -c \
     'echo "${DOCKERCFG}" > /root/.docker/config.json && \
-    cat /root/.docker/config.json && \
+    #cat /root/.docker/config.json && \
     docker ${DOCKERCMD}'
 }
 
@@ -66,13 +66,13 @@ done
 #docker18 manifest push ${USERNAME}/${IMAGE_NAME}:${VERSION}
 #docker18 manifest push --purge ${USERNAME}/${IMAGE_NAME}:latest
 
-# Docker18 needs a different DOCKERCFG
+# Docker18 requires a different DOCKERCFG
 dpkg -l jq || apt-get install -y jq
 DOCKERAUTH=`echo ${DOCKERCFG} | jq '."https://index.docker.io/v1/".auth'`
 DOCKERCFG="{ \"auths\": { \"https://index.docker.io/v1/\": { \"auth\": "${DOCKERAUTH}" } } }"
 
 ### Test docker18 manifest
-docker18 manifest create xezpeleta/helloworld:latest xezpeleta/helloworld:amd64-latest xezpeleta/helloworld:arm32v7-latest
+docker18 manifest create --amend xezpeleta/helloworld:latest xezpeleta/helloworld:amd64-latest xezpeleta/helloworld:arm32v7-latest
 docker18 manifest annotate xezpeleta/helloworld:latest xezpeleta/helloworld:amd64-latest --os linux --arch amd64
 docker18 manifest annotate xezpeleta/helloworld:latest xezpeleta/helloworld:arm32v7-latest --os linux --arch arm --variant 7
 docker18 manifest push xezpeleta/helloworld:latest
