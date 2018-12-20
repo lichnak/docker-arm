@@ -68,5 +68,5 @@ done
 
 
 ### Test docker18 manifest
-docker18 manifest create "${USERNAME}"/"${IMAGE_NAME}":latest "${USERNAME}"/"${IMAGE_NAME}":amd64-latest "${USERNAME}"/"${IMAGE_NAME}":arm32v7-latest
-docker18 manifest push "${USERNAME}"/"${IMAGE_NAME}":latest
+docker18 manifest create xezpeleta/helloworld:latest xezpeleta/helloworld:amd64-latest xezpeleta/helloworld:arm32v7-latest
+docker18 manifest push xezpeleta/helloworld:latest
