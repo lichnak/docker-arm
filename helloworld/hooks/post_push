@@ -14,11 +14,11 @@ docker18()
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
   -e DOCKERCMD="${commands}" \
+  -v $(pwd)/.docker/manifests:/root/.docker/manifests \
   -v /var/run/docker.sock:/var/run/docker.sock docker:18.09 sh -c \
-    'mkdir /root/.docker/ && \
-    echo "${DOCKERCFG}" > /root/.docker/config.json && \
-    cat /root/.docker/config.json && \
-    docker "${DOCKERCMD}"'
+    'echo "${DOCKERCFG}" > /root/.docker/config.json && \
+    #cat /root/.docker/config.json && \
+    docker ${DOCKERCMD}'
 }
 
 # Read image metadata from labels
@@ -55,8 +55,8 @@ done
 # Build a multi-arch manifest
 #docker18 manifest create --amend ${USERNAME}/${IMAGE_NAME}:${VERSION} \
 #  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION}
-docker18 manifest create --amend ${USERNAME}/${IMAGE_NAME}:latest \
-  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION}
+#docker18 manifest create --amend ${USERNAME}/${IMAGE_NAME}:latest \
+#  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION}
 
 #docker18 manifest annotate ${USERNAME}/${IMAGE_NAME}:${VERSION} \
 #  ${USERNAME}/${IMAGE_NAME}:amd64-${VERSION} --os linux --arch amd64
@@ -64,4 +64,9 @@ docker18 manifest create --amend ${USERNAME}/${IMAGE_NAME}:latest \
 #  ${USERNAME}/${IMAGE_NAME}:arm32v7-${VERSION} --os linux --arch arm --variant 7
 
 #docker18 manifest push ${USERNAME}/${IMAGE_NAME}:${VERSION}
-docker18 manifest push --purge ${USERNAME}/${IMAGE_NAME}:latest
+#docker18 manifest push --purge ${USERNAME}/${IMAGE_NAME}:latest
+
+
+### Test docker18 manifest
+docker18 manifest create "${USERNAME}"/"${IMAGE_NAME}":latest "${USERNAME}"/"${IMAGE_NAME}":amd64-latest "${USERNAME}"/"${IMAGE_NAME}":arm32v7-latest
+docker18 manifest push "${USERNAME}"/"${IMAGE_NAME}":latest
