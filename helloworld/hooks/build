@@ -19,6 +19,7 @@ docker18()
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
   -e DOCKERCMD="${commands}" \
+  -v "${DOCKERFILE_PATH}":"${DOCKERFILE_PATH}" \
   -v $(pwd)/.docker/manifests:/root/.docker/manifests \
   -v /var/run/docker.sock:/var/run/docker.sock docker:18.09 sh -c \
     'echo "${DOCKERCFG}" > /root/.docker/config.json && \
@@ -30,3 +31,7 @@ docker18 build  --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
                 --build-arg VCS_REF=`git rev-parse --short HEAD` \
                 -f "${DOCKERFILE_PATH}" \
                 -t "${IMAGE_NAME}" .
+
+# Check resulting image architecture
+echo "[DEBUG] Build finished correctly. Resulting arch:"
+docker image inspect "${IMAGE_NAME}" | grep Arch
