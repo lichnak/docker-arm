@@ -1,26 +1,10 @@
 #!/bin/bash
 set -e
 
-# Docker Hub client version is: 17.06.2-ee-6
-# Use a newer cli version (18.09.0) in order to use
-# experimental features (docker manifest):
-docker18()
-{
-  docker run --rm \
-  -e DOCKER_CLI_EXPERIMENTAL=enabled \
-  -e DOCKERCFG="${DOCKERCFG}" \
-  -v /var/run/docker.sock:/var/run/docker.sock docker "$@"
-}
-
 echo "---------- DEBUG ----------"
 alias
-echo "Docker version:"
-docker18 version
-
-echo -e "\n"
-echo "Environment variables:"
-echo "DOCKER_REPO: ${DOCKER_REPO}"
-echo "DOCKER_TAG: ${DOCKER_TAG}"
+echo "DockerHub legacy docker version:"
+docker version
 echo "---------------------------"
 
 # downloads a local copy of qemu on docker-hub build machines
