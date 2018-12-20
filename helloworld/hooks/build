@@ -1,0 +1,32 @@
+#!/bin/sh
+set -e
+
+# Docker Hub client version is: 17.06.2-ee-6
+# Use docker-in-docker (18.09.0) in order to use
+# experimental features (docker manifest):
+# Docker18 requires a different DOCKERCFG
+dpkg -l jq || apt-get install -y jq
+DOCKERAUTH=`echo ${DOCKERCFG} | jq '."https://index.docker.io/v1/".auth'`
+DOCKERCFG="{ \"auths\": { \"https://index.docker.io/v1/\": { \"auth\": "${DOCKERAUTH}" } } }"
+
+docker18()
+{ 
+  commands="$@"
+  echo "Running command: docker18 ${commands}"
+
+  docker run --rm \
+  -e DOCKER_CLI_EXPERIMENTAL=enabled \
+  -e DOCKER_HOST=unix:///var/run/docker.sock \
+  -e DOCKERCFG="${DOCKERCFG}" \
+  -e DOCKERCMD="${commands}" \
+  -v $(pwd)/.docker/manifests:/root/.docker/manifests \
+  -v /var/run/docker.sock:/var/run/docker.sock docker:18.09 sh -c \
+    'echo "${DOCKERCFG}" > /root/.docker/config.json && \
+    #cat /root/.docker/config.json && \
+    docker ${DOCKERCMD}'
+}
+
+docker18 build  --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+                --build-arg VCS_REF=`git rev-parse --short HEAD` \
+                -f "${DOCKERFILE_PATH}" \
+                -t "${IMAGE_NAME}" .
