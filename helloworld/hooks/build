@@ -19,7 +19,7 @@ docker18()
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   -e DOCKERCFG="${DOCKERCFG}" \
   -e DOCKERCMD="${commands}" \
-  -v "${DOCKERFILE_PATH}":"${DOCKERFILE_PATH}" \
+  -v $(pwd)/"${DOCKERFILE_PATH}":/"${DOCKERFILE_PATH}" \
   -v $(pwd)/.docker/manifests:/root/.docker/manifests \
   -v /var/run/docker.sock:/var/run/docker.sock docker:18.09 sh -c \
     'echo "${DOCKERCFG}" > /root/.docker/config.json && \
