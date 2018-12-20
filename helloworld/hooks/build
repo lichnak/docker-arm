@@ -20,7 +20,7 @@ docker18()
 { 
   commands="$@"
   echo "Running command: docker18 ${commands}"
-  docker exec docker:18.09 "${DOCKERCMD}"
+  docker exec docker18 "${DOCKERCMD}"
 }
 
 docker18_create
