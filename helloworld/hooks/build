@@ -5,32 +5,29 @@ set -e
 # Use docker-in-docker (18.09.0) in order to use
 # experimental features (docker manifest):
 # Docker18 requires a different DOCKERCFG
-cp "${DOCKERFILE_PATH}" /tmp
-dpkg -l jq || apt-get install -y jq
-DOCKERAUTH=`echo ${DOCKERCFG} | jq '."https://index.docker.io/v1/".auth'`
-DOCKERCFG="{ \"auths\": { \"https://index.docker.io/v1/\": { \"auth\": "${DOCKERAUTH}" } } }"
+
+docker18_create()
+{
+  docker_version="18.09"
+  docker create --name=docker18 \
+  -e DOCKER_CLI_EXPERIMENTAL=enabled \
+  -e DOCKER_HOST=unix:///var/run/docker.sock \
+  -e DOCKERCFG="${DOCKERCFG}" \
+  -v /var/run/docker.sock:/var/run/docker.sock docker:${docker_version}
+}
 
 docker18()
 { 
   commands="$@"
   echo "Running command: docker18 ${commands}"
-
-  docker run --rm \
-  -e DOCKER_CLI_EXPERIMENTAL=enabled \
-  -e DOCKER_HOST=unix:///var/run/docker.sock \
-  -e DOCKERCFG="${DOCKERCFG}" \
-  -e DOCKERCMD="${commands}" \
-  -v /tmp/"${DOCKERFILE_PATH}":/"${DOCKERFILE_PATH}" \
-  -v $(pwd)/.docker/manifests:/root/.docker/manifests \
-  -v /var/run/docker.sock:/var/run/docker.sock docker:18.09 sh -c \
-    'echo "${DOCKERCFG}" > /root/.docker/config.json && \
-    #cat /root/.docker/config.json && \
-    docker ${DOCKERCMD}'
+  docker exec docker:18.09 "${DOCKERCMD}"
 }
 
+docker18_create
+docker cp "${DOCKERFILE_PATH}" docker18:/"${DOCKERFILE_PATH}"
 docker18 build  --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
                 --build-arg VCS_REF=`git rev-parse --short HEAD` \
-                -f "${DOCKERFILE_PATH}" \
+                -f /"${DOCKERFILE_PATH}" \
                 -t "${IMAGE_NAME}" .
 
 # Check resulting image architecture
