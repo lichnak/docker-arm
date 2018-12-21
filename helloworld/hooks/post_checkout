@@ -2,7 +2,7 @@
 set -e
 
 echo "---------- DEBUG ----------"
-alias
+echo "OS: $(cat /etc/issue.net)"
 echo "DockerHub legacy docker version:"
 docker version
 echo "---------------------------"
