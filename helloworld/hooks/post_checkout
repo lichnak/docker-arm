@@ -7,8 +7,15 @@ echo "DockerHub legacy docker version:"
 docker version
 echo "---------------------------"
 
+# Update Docker CLI
+curl -L https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce-cli_18.09.0~3-0~ubuntu-xenial_amd64.deb -o docker-ce-cli_18.09.deb
+dpkg -i docker-ce-cli_18.09.deb
+
+echo "---------- DEBUG ----------"
+echo "Docker CLI updated. Version:"
+docker version
+echo "---------------------------"
+
 # downloads a local copy of qemu on docker-hub build machines
 curl -L https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-arm-static -o qemu-arm-static
-
-# Exec permission
 chmod 755 qemu-arm-static
